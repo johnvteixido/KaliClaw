@@ -4,7 +4,7 @@ import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomBytes } from "node:crypto";
-import { executeInSandbox } from "./wsb-manager.js";
+import { executeInSandbox } from "./linux-sandbox.js";
 
 /**
  * Teixido Sandbox Plugin for OpenClaw
@@ -59,7 +59,7 @@ function runASTFirewall(code, language) {
     }
     return { safe: false, reason: `AST firewall error: ${err.message}` };
   } finally {
-    try { execSync(`del "${tmpFile}"`, { stdio: "ignore" }); } catch { /* ignore */ }
+    try { execSync(`rm -f "${tmpFile}"`, { stdio: "ignore" }); } catch { /* ignore */ }
   }
 }
 
@@ -164,7 +164,7 @@ export default definePluginEntry({
         }
 
         // --- Phase 2: Ephemeral Windows Sandbox ---
-        api.logger.info("[Teixido Sandbox] AST clear. Launching ephemeral WSB...");
+        api.logger.info("[Teixido Sandbox] AST clear. Launching Linux Sandbox...");
         try {
           const output = await executeInSandbox(code, language);
           api.logger.info("[Teixido Sandbox] VM execution complete. VM destroyed.");
@@ -173,7 +173,7 @@ export default definePluginEntry({
               {
                 type: "text",
                 text: `✅ **Teixido Sandbox — Execution Complete**\n\n` +
-                  `**Environment:** Air-gapped Windows Sandbox (Hyper-V)\n` +
+                  `**Environment:** Air-gapped Linux Sandbox Environment\n` +
                   `**Networking:** Disabled\n` +
                   `**TeixidoLabs mount:** Read-Only\n\n` +
                   `**Output:**\n\`\`\`\n${output}\n\`\`\``,
@@ -198,7 +198,7 @@ export default definePluginEntry({
       id: "teixido-sandbox",
       start: () => {
         api.logger.info(
-          "[Teixido Sandbox] Active. AST Firewall (Python ast.parse) + Ephemeral WSB Proxy ready."
+          "[Teixido Sandbox] Active. AST Firewall (Python ast.parse) + Ephemeral Linux Sandbox Proxy ready."
         );
       },
       stop: () => {
