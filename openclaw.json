@@ -13,7 +13,7 @@
         "primary": [
           "openrouter/thinkingmachines/inkling:free",
           "openrouter/minimax/minimax-m3:free",
-          "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+          "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
           "openrouter/z-ai/glm-5.2:free"
         ],
         "fallbacks": []
@@ -38,7 +38,7 @@
           "primary": [
             "openrouter/thinkingmachines/inkling:free",
             "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
             "openrouter/z-ai/glm-5.2:free"
           ],
           "fallbacks": []
@@ -53,7 +53,7 @@
           "primary": [
             "openrouter/thinkingmachines/inkling:free",
             "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
             "openrouter/z-ai/glm-5.2:free"
           ],
           "fallbacks": []
@@ -68,7 +68,7 @@
           "primary": [
             "openrouter/thinkingmachines/inkling:free",
             "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
             "openrouter/z-ai/glm-5.2:free"
           ],
           "fallbacks": []
@@ -83,7 +83,7 @@
           "primary": [
             "openrouter/thinkingmachines/inkling:free",
             "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
             "openrouter/z-ai/glm-5.2:free"
           ],
           "fallbacks": []
@@ -98,7 +98,7 @@
           "primary": [
             "openrouter/thinkingmachines/inkling:free",
             "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
             "openrouter/z-ai/glm-5.2:free"
           ],
           "fallbacks": []
@@ -113,7 +113,7 @@
           "primary": [
             "openrouter/thinkingmachines/inkling:free",
             "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
             "openrouter/z-ai/glm-5.2:free"
           ],
           "fallbacks": []
@@ -128,7 +128,7 @@
           "primary": [
             "openrouter/thinkingmachines/inkling:free",
             "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
             "openrouter/z-ai/glm-5.2:free"
           ],
           "fallbacks": []
