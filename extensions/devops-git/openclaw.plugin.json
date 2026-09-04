@@ -1,0 +1,15 @@
+{
+  "id": "devops-git",
+  "name": "DevOps Git Automator",
+  "description": "Exposes git_auto_commit tool to the devops agent to commit verified gauntlet outputs.",
+  "kind": "tool",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      }
+    }
+  }
+}

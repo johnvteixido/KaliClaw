@@ -1,0 +1,15 @@
+{
+  "id": "gauntlet-loop",
+  "name": "Gauntlet Loop",
+  "description": "Multi-agent builder/critic loop orchestration. Provides a tool to run an automated iteration between a builder and a critic.",
+  "kind": "tool",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      }
+    }
+  }
+}

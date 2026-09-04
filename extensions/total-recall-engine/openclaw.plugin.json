@@ -1,0 +1,13 @@
+{
+  "id": "total-recall-engine",
+  "name": "Total Recall Engine",
+  "description": "Deterministic memory engine using Teixido Boreal Forest Paradigm to compress code into structural Domination Roots and store them in an immutable SQLite ledger.",
+  "kind": "tool",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": { "type": "boolean" }
+    }
+  }
+}
