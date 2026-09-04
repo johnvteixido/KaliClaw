@@ -29,14 +29,14 @@
       {
         "id": "main",
         "name": "glasswing",
-        "agentDir": "<USER_HOME>\\.openclaw\\agents\\glasswing\\agent",
-        "workspace": "<USER_HOME>\\.openclaw\\glasswing-workspace"
+        "agentDir": "<USER_HOME>/.openclaw/agents/glasswing/agent",
+        "workspace": "<USER_HOME>/.openclaw/glasswing-workspace"
       },
       {
         "id": "architect",
         "name": "architect",
-        "workspace": "<USER_HOME>\\.openclaw\\architect-workspace",
-        "agentDir": "<USER_HOME>\\.openclaw\\agents\\architect\\agent",
+        "workspace": "<USER_HOME>/.openclaw/architect-workspace",
+        "agentDir": "<USER_HOME>/.openclaw/agents/architect/agent",
         "model": {
           "primary": "openrouter/thinkingmachines/inkling:free",
           "fallbacks": []
@@ -45,8 +45,8 @@
       {
         "id": "coder",
         "name": "coder",
-        "workspace": "<USER_HOME>\\.openclaw\\coder-workspace",
-        "agentDir": "<USER_HOME>\\.openclaw\\agents\\coder\\agent",
+        "workspace": "<USER_HOME>/.openclaw/coder-workspace",
+        "agentDir": "<USER_HOME>/.openclaw/agents/coder/agent",
         "model": {
           "primary": "openrouter/minimax/minimax-m3:free",
           "fallbacks": []
@@ -55,8 +55,8 @@
       {
         "id": "hacker",
         "name": "hacker",
-        "workspace": "<USER_HOME>\\.openclaw\\hacker-workspace",
-        "agentDir": "<USER_HOME>\\.openclaw\\agents\\hacker\\agent",
+        "workspace": "<USER_HOME>/.openclaw/hacker-workspace",
+        "agentDir": "<USER_HOME>/.openclaw/agents/hacker/agent",
         "model": {
           "primary": "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
           "fallbacks": []
@@ -65,8 +65,8 @@
       {
         "id": "designer",
         "name": "designer",
-        "workspace": "<USER_HOME>\\.openclaw\\designer-workspace",
-        "agentDir": "<USER_HOME>\\.openclaw\\agents\\designer\\agent",
+        "workspace": "<USER_HOME>/.openclaw/designer-workspace",
+        "agentDir": "<USER_HOME>/.openclaw/agents/designer/agent",
         "model": {
           "primary": "openrouter/thinkingmachines/inkling:free",
           "fallbacks": []
@@ -75,8 +75,8 @@
       {
         "id": "researcher",
         "name": "researcher",
-        "workspace": "<USER_HOME>\\.openclaw\\researcher-workspace",
-        "agentDir": "<USER_HOME>\\.openclaw\\agents\\researcher\\agent",
+        "workspace": "<USER_HOME>/.openclaw/researcher-workspace",
+        "agentDir": "<USER_HOME>/.openclaw/agents/researcher/agent",
         "model": {
           "primary": "openrouter/thinkingmachines/inkling:free",
           "fallbacks": []
@@ -85,8 +85,8 @@
       {
         "id": "devops",
         "name": "devops",
-        "workspace": "<USER_HOME>\\.openclaw\\devops-workspace",
-        "agentDir": "<USER_HOME>\\.openclaw\\agents\\devops\\agent",
+        "workspace": "<USER_HOME>/.openclaw/devops-workspace",
+        "agentDir": "<USER_HOME>/.openclaw/agents/devops/agent",
         "model": {
           "primary": "openrouter/thinkingmachines/inkling:free",
           "fallbacks": []
@@ -104,7 +104,17 @@
         "enabled": true
       },
       "memory-lancedb": {
-        "enabled": true
+        "enabled": true,
+        "dbPath": "<USER_HOME>/.openclaw/memory/lancedb",
+        "autoCapture": true,
+        "autoRecall": true,
+        "embedding": {
+          "provider": "openai",
+          "model": "sentence-transformers/all-MiniLM-L6-v2",
+          "baseUrl": "https://api-inference.huggingface.co/v1",
+          "apiKey": "<REDACTED_API_KEY>",
+          "dimensions": 384
+        }
       },
       "teixido-sandbox": {
         "enabled": true
