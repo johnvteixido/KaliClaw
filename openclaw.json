@@ -21,7 +21,7 @@
         "model": "sentence-transformers/all-MiniLM-L6-v2",
         "remote": {
           "baseUrl": "https://api-inference.huggingface.co/v1",
-          "apiKey": "<REDACTED_API_KEY>"
+          "apiKey": "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"
         }
       }
     },
@@ -78,7 +78,12 @@
         "workspace": "<USER_HOME>/.openclaw/researcher-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/researcher/agent",
         "model": {
-          "primary": "openrouter/thinkingmachines/inkling:free",
+          "primary": [
+            "openrouter/thinkingmachines/inkling:free",
+            "openrouter/minimax/minimax-m3:free",
+            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "openrouter/z-ai/glm-5.2:free"
+          ],
           "fallbacks": []
         }
       },
@@ -113,7 +118,7 @@
           "provider": "openai",
           "model": "sentence-transformers/all-MiniLM-L6-v2",
           "baseUrl": "https://api-inference.huggingface.co/v1",
-          "apiKey": "<REDACTED_API_KEY>",
+          "apiKey": "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",
           "dimensions": 384
         }
       },
