@@ -1,0 +1,23 @@
+{
+  "name": "teixido-sandbox",
+  "version": "1.0.0",
+  "description": "Ephemeral Windows Sandbox proxy with real Python AST firewall for OpenClaw agent code execution",
+  "type": "module",
+  "openclaw": {
+    "runtimeExtensions": [
+      "./index.js"
+    ]
+  },
+  "files": [
+    "index.js",
+    "openclaw.plugin.json"
+  ],
+  "peerDependencies": {
+    "openclaw": ">=2026.7.1"
+  },
+  "peerDependenciesMeta": {
+    "openclaw": {
+      "optional": true
+    }
+  }
+}

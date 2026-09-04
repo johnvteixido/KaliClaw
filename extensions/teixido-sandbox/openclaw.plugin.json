@@ -1,0 +1,21 @@
+{
+  "id": "teixido-sandbox",
+  "name": "Teixido Sandbox",
+  "description": "Ephemeral Windows Sandbox execution proxy with real Python AST firewall. Intercepts agent code execution, statically analyzes payloads via Python ast.parse(), and routes safe code through an air-gapped Windows Sandbox VM.",
+  "kind": "tool",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      },
+      "hostReadOnlyPath": {
+        "type": "string"
+      },
+      "blockNetwork": {
+        "type": "boolean"
+      }
+    }
+  }
+}
