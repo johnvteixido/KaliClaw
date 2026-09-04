@@ -10,10 +10,13 @@
     "defaults": {
       "thinkingDefault": "max",
       "model": {
-        "primary": "openrouter/thinkingmachines/inkling:free",
-        "fallbacks": [
-          "openrouter/cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
-        ]
+        "primary": [
+          "openrouter/thinkingmachines/inkling:free",
+          "openrouter/minimax/minimax-m3:free",
+          "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+          "openrouter/z-ai/glm-5.2:free"
+        ],
+        "fallbacks": []
       },
       "imageModel": "openrouter/minimax/minimax-m3:free",
       "memorySearch": {
@@ -30,7 +33,16 @@
         "id": "main",
         "name": "glasswing",
         "agentDir": "<USER_HOME>/.openclaw/agents/glasswing/agent",
-        "workspace": "<USER_HOME>/.openclaw/glasswing-workspace"
+        "workspace": "<USER_HOME>/.openclaw/glasswing-workspace",
+        "model": {
+          "primary": [
+            "openrouter/thinkingmachines/inkling:free",
+            "openrouter/minimax/minimax-m3:free",
+            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "openrouter/z-ai/glm-5.2:free"
+          ],
+          "fallbacks": []
+        }
       },
       {
         "id": "architect",
@@ -38,7 +50,12 @@
         "workspace": "<USER_HOME>/.openclaw/architect-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/architect/agent",
         "model": {
-          "primary": "openrouter/thinkingmachines/inkling:free",
+          "primary": [
+            "openrouter/thinkingmachines/inkling:free",
+            "openrouter/minimax/minimax-m3:free",
+            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "openrouter/z-ai/glm-5.2:free"
+          ],
           "fallbacks": []
         }
       },
@@ -48,7 +65,12 @@
         "workspace": "<USER_HOME>/.openclaw/coder-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/coder/agent",
         "model": {
-          "primary": "openrouter/minimax/minimax-m3:free",
+          "primary": [
+            "openrouter/thinkingmachines/inkling:free",
+            "openrouter/minimax/minimax-m3:free",
+            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "openrouter/z-ai/glm-5.2:free"
+          ],
           "fallbacks": []
         }
       },
@@ -58,7 +80,12 @@
         "workspace": "<USER_HOME>/.openclaw/hacker-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/hacker/agent",
         "model": {
-          "primary": "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+          "primary": [
+            "openrouter/thinkingmachines/inkling:free",
+            "openrouter/minimax/minimax-m3:free",
+            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "openrouter/z-ai/glm-5.2:free"
+          ],
           "fallbacks": []
         }
       },
@@ -68,7 +95,12 @@
         "workspace": "<USER_HOME>/.openclaw/designer-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/designer/agent",
         "model": {
-          "primary": "openrouter/thinkingmachines/inkling:free",
+          "primary": [
+            "openrouter/thinkingmachines/inkling:free",
+            "openrouter/minimax/minimax-m3:free",
+            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "openrouter/z-ai/glm-5.2:free"
+          ],
           "fallbacks": []
         }
       },
@@ -93,7 +125,12 @@
         "workspace": "<USER_HOME>/.openclaw/devops-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/devops/agent",
         "model": {
-          "primary": "openrouter/thinkingmachines/inkling:free",
+          "primary": [
+            "openrouter/thinkingmachines/inkling:free",
+            "openrouter/minimax/minimax-m3:free",
+            "huggingface/cognitivecomputations/dolphin-2.9.3-mistral-7b",
+            "openrouter/z-ai/glm-5.2:free"
+          ],
           "fallbacks": []
         }
       }
