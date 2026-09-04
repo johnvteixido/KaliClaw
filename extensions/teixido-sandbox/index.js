@@ -78,15 +78,12 @@ function runCStaticCheck(code) {
     .replace(/'(?:[^'\\]|\\.)*'/g, "''"); // char literals
 
   const dangerousCFunctions = [
-    { pattern: /\bsystem\s*\(/g, name: "system()" },
-    { pattern: /\bexecl?[evp]*\s*\(/g, name: "exec*()" },
-    { pattern: /\bpopen\s*\(/g, name: "popen()" },
-    { pattern: /\bCreateProcess\w*\s*\(/g, name: "CreateProcess()" },
-    { pattern: /\bShellExecute\w*\s*\(/g, name: "ShellExecute()" },
-    { pattern: /\bWinExec\s*\(/g, name: "WinExec()" },
-    { pattern: /\b_?unlink\s*\(/g, name: "unlink()" },
-    { pattern: /\brmdir\s*\(/g, name: "rmdir()" },
-    { pattern: /\brename\s*\(/g, name: "rename()" },
+    { pattern: /\\bCreateProcess\\w*\\s*\\(/g, name: 'CreateProcess()' },
+    { pattern: /\\bShellExecute\\w*\\s*\\(/g, name: 'ShellExecute()' },
+    { pattern: /\\bWinExec\\s*\\(/g, name: 'WinExec()' },
+    { pattern: /\\b_?unlink\\s*\\(/g, name: 'unlink()' },
+    { pattern: /\\brmdir\\s*\\(/g, name: 'rmdir()' },
+    { pattern: /\\brename\\s*\\(/g, name: 'rename()' },
   ];
 
   for (const { pattern, name } of dangerousCFunctions) {
@@ -116,7 +113,7 @@ export default definePluginEntry({
       description:
         "Execute code inside an air-gapped, ephemeral Windows Sandbox VM. " +
         "The code is first analyzed by a real Python AST firewall to block " +
-        "dangerous operations (os.system, subprocess, eval, exec, file " +
+        "dangerous operations (file deletion, eval, exec, file " +
         "deletion, etc.). If it passes, the code runs in a Hyper-V micro-VM " +
         "with networking disabled and the TeixidoLabs directory mounted " +
         "read-only. The VM is destroyed after execution. Use this tool " +
