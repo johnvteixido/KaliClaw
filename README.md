@@ -1,4 +1,4 @@
-# OpenClaw Swarm - Kali Linux Native Architecture
+# KaliClaw - Kali Linux Native Swarm Architecture
 
 This repository contains a highly customized, multi-agent OpenClaw Swarm setup, explicitly rebuilt from the ground up to be **100% native to Kali Linux**. 
 
@@ -22,8 +22,8 @@ It features a persistent total recall memory engine, an automated DevOps Git wor
 For a streamlined, one-click installation on Kali Linux (or any Debian-based distro), run the interactive setup script:
 
 ```bash
-git clone https://github.com/johnvteixido/OpenClaw-Setup.git
-cd OpenClaw-Setup
+git clone https://github.com/johnvteixido/KaliClaw.git
+cd KaliClaw
 chmod +x setup.sh
 ./setup.sh
 ```
