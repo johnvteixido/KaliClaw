@@ -3,34 +3,38 @@ import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
 export default definePluginEntry({
   id: "gauntlet-loop",
   name: "Gauntlet Loop",
-  description: "Runs an automated builder vs critic loop until an objective benchmark is met, featuring Self-Healing and Teixido Compression.",
+  description: "Runs an automated builder vs critic loop until an objective benchmark is met. Includes semi-autonomous mode for human-in-the-loop validation.",
   register(api) {
     api.registerTool({
       name: "execute_gauntlet_loop",
-      description: "Run an automated gauntlet loop between a builder and a critic agent.",
+      description: "Run a gauntlet loop between a builder and a critic agent. Set mode to 'semi-autonomous' to require human approval before passing.",
       parameters: {
         type: "object",
-        required: ["benchmark", "task", "builder_agent", "critic_agent", "max_iterations"],
+        required: ["benchmark", "task", "builder_agent", "critic_agent", "max_iterations", "mode"],
         properties: {
           task: { type: "string" },
           benchmark: { type: "string" },
           builder_agent: { type: "string" },
           critic_agent: { type: "string" },
-          max_iterations: { type: "number" }
+          max_iterations: { type: "number", description: "Hard cap on the number of loops to prevent infinite looping." },
+          mode: { type: "string", enum: ["autonomous", "semi-autonomous"], description: "If semi-autonomous, the loop pauses for human approval if the critic passes it." }
         }
       },
-      async execute({ task, benchmark, builder_agent, critic_agent, max_iterations }, ctx) {
-        api.logger.info(`Starting Gauntlet Loop... Builder: ${builder_agent}, Critic: ${critic_agent}`);
+      async execute({ task, benchmark, builder_agent, critic_agent, max_iterations, mode }, ctx) {
+        api.logger.info(\Starting Gauntlet Loop [\]... Builder: \, Critic: \\);
         let currentOutput = "";
         let attempt = 1;
         let pass = false;
 
-        while (attempt <= max_iterations && !pass) {
-          api.logger.info(`[Gauntlet Iteration ${attempt}] Executing Builder...`);
+        // Failsafe: Hard cap iterations just in case the agent sets a crazy number
+        const safeMaxIterations = Math.min(max_iterations, 10);
+
+        while (attempt <= safeMaxIterations && !pass) {
+          api.logger.info(\[Gauntlet Iteration \/\] Executing Builder...\);
           
           const builderPrompt = attempt === 1 
-            ? `Your task is: ${task}\n\nBuild this exactly. Return ONLY your final implementation.`
-            : `Your previous output was rejected. Feedback/Error:\n${currentOutput}\n\nFix the issues and return ONLY the completely revised implementation.`;
+            ? \Your task is: \\n\nBuild this exactly. Return ONLY your final implementation.\
+            : \Your previous output was rejected. Feedback/Error:\n\\n\nFix the issues and return ONLY the completely revised implementation.\;
 
           const builderRes = await fetch("http://127.0.0.1:18789/v1/chat/completions", {
             method: "POST", headers: { "Content-Type": "application/json" },
@@ -39,10 +43,9 @@ export default definePluginEntry({
           const builderData = await builderRes.json();
           const builderOutput = builderData.choices?.[0]?.message?.content || "";
 
-          // Throttling to prevent free tier rate-limit (quota) errors
           await new Promise(r => setTimeout(r, 4000));
 
-          api.logger.info(`[Gauntlet Iteration ${attempt}] Running Code in Sandbox...`);
+          api.logger.info(\[Gauntlet Iteration \] Running Code in Sandbox...\);
           const sandboxRes = await fetch("http://127.0.0.1:18789/v1/tools/call", {
             method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tool: "teixido_sandbox_exec", args: { code: builderOutput, language: "python" } })
@@ -51,15 +54,14 @@ export default definePluginEntry({
           if (sandboxRes && sandboxRes.ok) {
             const sandboxData = await sandboxRes.json();
             if (sandboxData.error || (sandboxData.output && sandboxData.output.includes("Traceback"))) {
-               api.logger.info(`[Gauntlet Iteration ${attempt}] Sandbox Failed! Auto-healing...`);
+               api.logger.info(\[Gauntlet Iteration \] Sandbox Failed! Auto-healing...\);
                currentOutput = "RUNTIME ERROR IN SANDBOX:\n" + (sandboxData.error || sandboxData.output);
                attempt++;
                continue;
             }
           }
 
-          api.logger.info(`[Gauntlet Iteration ${attempt}] Compressing via Teixido MCP...`);
-          // Compression to prevent Token Quota Limits
+          api.logger.info(\[Gauntlet Iteration \] Compressing via Teixido MCP...\);
           let compressedCode = builderOutput;
           const mcpRes = await fetch("http://127.0.0.1:18789/v1/tools/call", {
             method: "POST", headers: { "Content-Type": "application/json" },
@@ -73,8 +75,8 @@ export default definePluginEntry({
 
           await new Promise(r => setTimeout(r, 4000));
 
-          api.logger.info(`[Gauntlet Iteration ${attempt}] Executing Critic...`);
-          const criticPrompt = `You are a ruthless critic. Review this TEIXIDO SKELETON against the benchmark:\n\nBENCHMARK: ${benchmark}\n\nTEIXIDO SKELETON (Compressed Structure):\n${compressedCode}\n\nIf it perfectly meets the structural benchmark, reply ONLY with "PASS". If it fails structurally, provide a list of flaws.`;
+          api.logger.info(\[Gauntlet Iteration \] Executing Critic...\);
+          const criticPrompt = \You are a ruthless critic. Review this TEIXIDO SKELETON against the benchmark:\n\nBENCHMARK: \\n\nTEIXIDO SKELETON (Compressed Structure):\n\\n\nIf it perfectly meets the structural benchmark, reply ONLY with "PASS". If it fails structurally, provide a list of flaws.\;
 
           const criticRes = await fetch("http://127.0.0.1:18789/v1/chat/completions", {
             method: "POST", headers: { "Content-Type": "application/json" },
@@ -84,11 +86,18 @@ export default definePluginEntry({
           const criticFeedback = criticData.choices?.[0]?.message?.content || "";
 
           if (criticFeedback.toUpperCase().includes("PASS") && criticFeedback.length < 15) {
-            pass = true;
-            api.logger.info(`[Gauntlet Iteration ${attempt}] Critic APPROVED!`);
-            currentOutput = builderOutput;
+            
+            if (mode === "semi-autonomous") {
+                api.logger.warn(\[Gauntlet Iteration \] Critic passed, but mode is semi-autonomous. Returning to human for final approval.\);
+                return \SEMI-AUTONOMOUS PAUSE: The Critic approved the code on iteration \, but human validation is required.\n\nPlease review the output below. If approved, you may commit it using the devops_git tool. If rejected, tell me what to fix and I will restart the loop.\n\nPROPOSED CODE:\n\\;
+            } else {
+                pass = true;
+                api.logger.info(\[Gauntlet Iteration \] Critic APPROVED! Loop complete.\);
+                currentOutput = builderOutput;
+            }
+
           } else {
-            api.logger.info(`[Gauntlet Iteration ${attempt}] Critic REJECTED.`);
+            api.logger.info(\[Gauntlet Iteration \] Critic REJECTED.\);
             currentOutput = criticFeedback;
             attempt++;
           }
@@ -97,9 +106,9 @@ export default definePluginEntry({
         }
 
         if (pass) {
-          return `SUCCESS! Loop completed in ${attempt} iterations.\n\nFINAL APPROVED OUTPUT:\n${currentOutput}`;
+          return \SUCCESS! Autonomous loop completed in \ iterations.\n\nFINAL APPROVED OUTPUT:\n\\;
         } else {
-          return `FAILED! Reached max iterations.\n\nLAST FEEDBACK:\n${currentOutput}`;
+          return \FAILED! Reached max iterations (\). Loop aborted to prevent infinite hallucination.\n\nLAST FEEDBACK:\n\\;
         }
       }
     });
