@@ -10,7 +10,7 @@ echo ""
 # 1. Check prerequisites
 if ! command -v npm &> /dev/null; then
     echo -e "\e[1;31m[!] npm/Node.js is not installed.\e[0m"
-    echo "Please install it first: sudo apt update && sudo apt install -y nodejs npm"
+    echo "Please install it first: sudo apt update && sudo apt install -y nodejs npm python3 gcc g++"
     exit 1
 fi
 
