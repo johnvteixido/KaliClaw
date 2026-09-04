@@ -102,7 +102,7 @@
     "entries": {
       "openrouter": {
         "enabled": true,
-        "apiKey": "<REDACTED_OPENROUTER_KEY>"
+        "apiKey": "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"
       },
       "memory-lancedb": {
         "enabled": true,
