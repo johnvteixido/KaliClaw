@@ -3,11 +3,11 @@ import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
 export default definePluginEntry({
   id: "gauntlet-loop",
   name: "Gauntlet Loop",
-  description: "Runs an automated builder vs critic loop until an objective benchmark is met. Includes semi-autonomous mode for human-in-the-loop validation.",
+  description: "Runs an automated builder vs critic loop. Supports manual UI cancellation and scaling up to 100 iterations.",
   register(api) {
     api.registerTool({
       name: "execute_gauntlet_loop",
-      description: "Run a gauntlet loop between a builder and a critic agent. Set mode to 'semi-autonomous' to require human approval before passing.",
+      description: "Run a gauntlet loop between a builder and a critic agent. This tool supports manual user cancellation from the UI.",
       parameters: {
         type: "object",
         required: ["benchmark", "task", "builder_agent", "critic_agent", "max_iterations", "mode"],
@@ -16,20 +16,33 @@ export default definePluginEntry({
           benchmark: { type: "string" },
           builder_agent: { type: "string" },
           critic_agent: { type: "string" },
-          max_iterations: { type: "number", description: "Hard cap on the number of loops to prevent infinite looping." },
-          mode: { type: "string", enum: ["autonomous", "semi-autonomous"], description: "If semi-autonomous, the loop pauses for human approval if the critic passes it." }
+          max_iterations: { type: "number", description: "Hard cap on iterations. Safely scales up to 100." },
+          mode: { type: "string", enum: ["autonomous", "semi-autonomous"], description: "If semi-autonomous, pauses for human approval if the critic passes." }
         }
       },
       async execute({ task, benchmark, builder_agent, critic_agent, max_iterations, mode }, ctx) {
+        
+        // This hooks into the OpenClaw UI's native 'Cancel Tool' button.
+        let isCancelled = false;
+        ctx.onCancel(() => {
+          api.logger.warn("[Gauntlet] User clicked the ABORT button in the UI. Terminating loop.");
+          isCancelled = true;
+        });
+
         api.logger.info(\Starting Gauntlet Loop [\]... Builder: \, Critic: \\);
         let currentOutput = "";
         let attempt = 1;
         let pass = false;
 
-        // Failsafe: Hard cap iterations just in case the agent sets a crazy number
-        const safeMaxIterations = Math.min(max_iterations, 10);
+        // Scale max iterations up to 100 as requested
+        const safeMaxIterations = Math.min(max_iterations, 100);
 
         while (attempt <= safeMaxIterations && !pass) {
+          
+          if (isCancelled) {
+             return \MANUAL ABORT TRIGGERED: The user cancelled the gauntlet loop from the UI on iteration \.\n\nLAST FEEDBACK:\n\\;
+          }
+
           api.logger.info(\[Gauntlet Iteration \/\] Executing Builder...\);
           
           const builderPrompt = attempt === 1 
@@ -43,7 +56,10 @@ export default definePluginEntry({
           const builderData = await builderRes.json();
           const builderOutput = builderData.choices?.[0]?.message?.content || "";
 
-          await new Promise(r => setTimeout(r, 4000));
+          // Fast 2-second sleep to prevent network spam
+          await new Promise(r => setTimeout(r, 2000));
+
+          if (isCancelled) break;
 
           api.logger.info(\[Gauntlet Iteration \] Running Code in Sandbox...\);
           const sandboxRes = await fetch("http://127.0.0.1:18789/v1/tools/call", {
@@ -73,7 +89,7 @@ export default definePluginEntry({
             if (mcpData.output) compressedCode = mcpData.output;
           }
 
-          await new Promise(r => setTimeout(r, 4000));
+          if (isCancelled) break;
 
           api.logger.info(\[Gauntlet Iteration \] Executing Critic...\);
           const criticPrompt = \You are a ruthless critic. Review this TEIXIDO SKELETON against the benchmark:\n\nBENCHMARK: \\n\nTEIXIDO SKELETON (Compressed Structure):\n\\n\nIf it perfectly meets the structural benchmark, reply ONLY with "PASS". If it fails structurally, provide a list of flaws.\;
@@ -86,23 +102,23 @@ export default definePluginEntry({
           const criticFeedback = criticData.choices?.[0]?.message?.content || "";
 
           if (criticFeedback.toUpperCase().includes("PASS") && criticFeedback.length < 15) {
-            
             if (mode === "semi-autonomous") {
                 api.logger.warn(\[Gauntlet Iteration \] Critic passed, but mode is semi-autonomous. Returning to human for final approval.\);
-                return \SEMI-AUTONOMOUS PAUSE: The Critic approved the code on iteration \, but human validation is required.\n\nPlease review the output below. If approved, you may commit it using the devops_git tool. If rejected, tell me what to fix and I will restart the loop.\n\nPROPOSED CODE:\n\\;
+                return \SEMI-AUTONOMOUS PAUSE: The Critic approved the code on iteration \, but human validation is required.\n\nPlease review the output below. If approved, you may commit it.\n\nPROPOSED CODE:\n\\;
             } else {
                 pass = true;
                 api.logger.info(\[Gauntlet Iteration \] Critic APPROVED! Loop complete.\);
                 currentOutput = builderOutput;
             }
-
           } else {
             api.logger.info(\[Gauntlet Iteration \] Critic REJECTED.\);
             currentOutput = criticFeedback;
             attempt++;
           }
-          
-          await new Promise(r => setTimeout(r, 4000));
+        }
+
+        if (isCancelled) {
+          return \MANUAL ABORT TRIGGERED: The user cancelled the gauntlet loop from the UI on iteration \.\n\nLAST FEEDBACK:\n\\;
         }
 
         if (pass) {
