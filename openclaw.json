@@ -101,7 +101,8 @@
   "plugins": {
     "entries": {
       "openrouter": {
-        "enabled": true
+        "enabled": true,
+        "apiKey": "<REDACTED_OPENROUTER_KEY>"
       },
       "memory-lancedb": {
         "enabled": true,

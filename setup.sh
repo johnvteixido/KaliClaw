@@ -32,15 +32,18 @@ echo -e "\e[1;34m[*] Copying custom plugins and agents to ~/.openclaw ...\e[0m"
 cp -r extensions/* ~/.openclaw/extensions/ 2>/dev/null
 cp -r agents/* ~/.openclaw/agents/ 2>/dev/null
 
-# 5. Configure openclaw.json
+# 5. Configure openclaw.json and Linux native Environment Variables
 echo -e "\e[1;34m[*] Generating openclaw.json configuration ...\e[0m"
 cp openclaw.json ~/.openclaw/openclaw.json
 
 # Replace placeholders with the actual HOME directory
-sed -i "s|<USER_HOME>|`$HOME|g" ~/.openclaw/openclaw.json
+sed -i "s|<USER_HOME>|$HOME|g" ~/.openclaw/openclaw.json
 
-# Inject API keys (Assuming OPENROUTER_KEY is handled via env vars or inserted here)
-# For this setup, we replace the specific REDACTED placeholders.
+# Inject API keys natively into the JSON configuration
+if [ ! -z "$OPENROUTER_KEY" ]; then
+    sed -i "s|<REDACTED_OPENROUTER_KEY>|$OPENROUTER_KEY|g" ~/.openclaw/openclaw.json
+fi
+
 if [ ! -z "$HF_KEY" ]; then
     sed -i "s|<REDACTED_API_KEY>|$HF_KEY|g" ~/.openclaw/openclaw.json
 fi
@@ -48,6 +51,12 @@ fi
 # Set a random gateway token for local security
 RANDOM_TOKEN=$(head -c 16 /dev/urandom | xxd -p)
 sed -i "s|<REDACTED_GATEWAY_TOKEN>|$RANDOM_TOKEN|g" ~/.openclaw/openclaw.json
+
+# Export keys to standard Linux native .env file for absolute redundancy
+echo "OPENROUTER_API_KEY=$OPENROUTER_KEY" > ~/.openclaw/.env
+echo "HUGGINGFACE_API_KEY=$HF_KEY" >> ~/.openclaw/.env
+echo "OPENCLAW_GATEWAY_TOKEN=$RANDOM_TOKEN" >> ~/.openclaw/.env
+chmod 600 ~/.openclaw/.env
 
 # 6. Global Install (uses sudo if not root)
 echo -e "\e[1;34m[*] Installing OpenClaw NPM package globally ...\e[0m"
@@ -64,3 +73,4 @@ echo -e " Your Gateway Token is: \e[1;37m$RANDOM_TOKEN\e[0m (Save this!)"
 echo ""
 echo -e " To start the swarm, simply run: \e[1;36mopenclaw gateway\e[0m"
 echo -e "\e[1;32m================================================\e[0m"
+
