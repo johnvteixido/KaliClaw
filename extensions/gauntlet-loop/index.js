@@ -3,7 +3,7 @@ import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
 export default definePluginEntry({
   id: "gauntlet-loop",
   name: "Gauntlet Loop",
-  description: "Runs an automated builder vs critic loop. Supports manual UI cancellation and scaling up to 100 iterations.",
+  description: "Runs an automated builder vs critic loop. Supports manual UI cancellation, scaling up to 100 iterations, and dynamic anti-hallucination pivoting.",
   register(api) {
     api.registerTool({
       name: "execute_gauntlet_loop",
@@ -45,9 +45,10 @@ export default definePluginEntry({
 
           api.logger.info(\[Gauntlet Iteration \/\] Executing Builder...\);
           
+          // DYNAMIC ANTI-HALLUCINATION INJECTION
           const builderPrompt = attempt === 1 
             ? \Your task is: \\n\nBuild this exactly. Return ONLY your final implementation.\
-            : \Your previous output was rejected. Feedback/Error:\n\\n\nFix the issues and return ONLY the completely revised implementation.\;
+            : \Your previous output was rejected. Feedback/Error:\n\\n\nCRITICAL SYSTEM OVERRIDE: The previous approach FAILED. DO NOT repeat the same hallucinated logic or make minor syntax tweaks. You MUST force a dynamic pivot. Re-architect the solution utilizing entirely different advanced techniques, alternative methods, or novel conceptual models. Break out of your current thought loop and attack the problem from a completely new angle. Return ONLY the completely revised implementation.\;
 
           const builderRes = await fetch("http://127.0.0.1:18789/v1/chat/completions", {
             method: "POST", headers: { "Content-Type": "application/json" },
