@@ -9,15 +9,7 @@
   "agents": {
     "defaults": {
       "thinkingDefault": "max",
-      "model": {
-        "primary": [
-          "openrouter/thinkingmachines/inkling:free",
-          "openrouter/minimax/minimax-m3:free",
-          "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
-          "openrouter/z-ai/glm-5.2:free"
-        ],
-        "fallbacks": []
-      },
+      "model": "openrouter/cognitivecomputations/dolphin-2.9-phi3-mini",
       "imageModel": "openrouter/minimax/minimax-m3:free",
       "memorySearch": {
         "provider": "openai",
@@ -34,129 +26,76 @@
         "name": "glasswing",
         "agentDir": "<USER_HOME>/.openclaw/agents/glasswing/agent",
         "workspace": "<USER_HOME>/.openclaw/glasswing-workspace",
-        "model": {
-          "primary": [
-            "openrouter/thinkingmachines/inkling:free",
-            "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
-            "openrouter/z-ai/glm-5.2:free"
-          ],
-          "fallbacks": []
-        }
+        "model": "openrouter/cognitivecomputations/dolphin-2.9-phi3-mini"
       },
       {
         "id": "architect",
         "name": "architect",
         "workspace": "<USER_HOME>/.openclaw/architect-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/architect/agent",
-        "model": {
-          "primary": [
-            "openrouter/thinkingmachines/inkling:free",
-            "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
-            "openrouter/z-ai/glm-5.2:free"
-          ],
-          "fallbacks": []
-        }
+        "model": "openrouter/cognitivecomputations/dolphin-2.9-phi3-mini"
       },
       {
         "id": "coder",
         "name": "coder",
         "workspace": "<USER_HOME>/.openclaw/coder-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/coder/agent",
-        "model": {
-          "primary": [
-            "openrouter/thinkingmachines/inkling:free",
-            "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
-            "openrouter/z-ai/glm-5.2:free"
-          ],
-          "fallbacks": []
-        }
+        "model": "openrouter/cognitivecomputations/dolphin-2.9-phi3-mini"
       },
       {
         "id": "hacker",
         "name": "hacker",
         "workspace": "<USER_HOME>/.openclaw/hacker-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/hacker/agent",
-        "model": {
-          "primary": [
-            "openrouter/thinkingmachines/inkling:free",
-            "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
-            "openrouter/z-ai/glm-5.2:free"
-          ],
-          "fallbacks": []
-        }
+        "model": "openrouter/cognitivecomputations/dolphin-2.9-phi3-mini"
       },
       {
         "id": "designer",
         "name": "designer",
         "workspace": "<USER_HOME>/.openclaw/designer-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/designer/agent",
-        "model": {
-          "primary": [
-            "openrouter/thinkingmachines/inkling:free",
-            "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
-            "openrouter/z-ai/glm-5.2:free"
-          ],
-          "fallbacks": []
-        }
+        "model": "openrouter/cognitivecomputations/dolphin-2.9-phi3-mini"
       },
       {
         "id": "researcher",
         "name": "researcher",
         "workspace": "<USER_HOME>/.openclaw/researcher-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/researcher/agent",
-        "model": {
-          "primary": [
-            "openrouter/thinkingmachines/inkling:free",
-            "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
-            "openrouter/z-ai/glm-5.2:free"
-          ],
-          "fallbacks": []
-        }
+        "model": "openrouter/cognitivecomputations/dolphin-2.9-phi3-mini"
       },
       {
         "id": "devops",
         "name": "devops",
         "workspace": "<USER_HOME>/.openclaw/devops-workspace",
         "agentDir": "<USER_HOME>/.openclaw/agents/devops/agent",
-        "model": {
-          "primary": [
-            "openrouter/thinkingmachines/inkling:free",
-            "openrouter/minimax/minimax-m3:free",
-            "huggingface/cognitivecomputations/dolphin-2.9-phi3-mini",
-            "openrouter/z-ai/glm-5.2:free"
-          ],
-          "fallbacks": []
-        }
+        "model": "openrouter/cognitivecomputations/dolphin-2.9-phi3-mini"
       }
     ]
   },
   "meta": {
-    "lastTouchedVersion": "2026.7.1-2",
-    "lastTouchedAt": "2026-08-26T02:54:54.508Z"
+    "lastTouchedVersion": "2026.7.1-2"
   },
   "plugins": {
     "entries": {
       "openrouter": {
         "enabled": true,
-        "apiKey": "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"
+        "settings": {
+          "apiKey": "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"
+        }
       },
       "memory-lancedb": {
         "enabled": true,
-        "dbPath": "<USER_HOME>/.openclaw/memory/lancedb",
-        "autoCapture": true,
-        "autoRecall": true,
-        "embedding": {
-          "provider": "openai",
-          "model": "sentence-transformers/all-MiniLM-L6-v2",
-          "baseUrl": "https://api-inference.huggingface.co/v1",
-          "apiKey": "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",
-          "dimensions": 384
+        "settings": {
+          "dbPath": "<USER_HOME>/.openclaw/memory/lancedb",
+          "autoCapture": true,
+          "autoRecall": true,
+          "embedding": {
+            "provider": "openai",
+            "model": "sentence-transformers/all-MiniLM-L6-v2",
+            "baseUrl": "https://api-inference.huggingface.co/v1",
+            "apiKey": "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",
+            "dimensions": 384
+          }
         }
       },
       "teixido-sandbox": {
