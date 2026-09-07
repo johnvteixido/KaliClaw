@@ -45,9 +45,9 @@ chmod 600 ~/.openclaw/.env
 # 5. Global Install (uses sudo if not root)
 echo -e "\e[1;34m[*] Installing OpenClaw NPM package globally ...\e[0m"
 if [ "$EUID" -ne 0 ]; then
-    sudo npm install -g openclaw@latest
+    sudo npm install -g openclaw@latest --allow-scripts=openclaw,@google/genai,koffi,tree-sitter-bash,protobufjs
 else
-    npm install -g openclaw@latest
+    npm install -g openclaw@latest --allow-scripts=openclaw,@google/genai,koffi,tree-sitter-bash,protobufjs
 fi
 
 echo ""
